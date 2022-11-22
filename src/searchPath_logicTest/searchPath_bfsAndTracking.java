@@ -7,18 +7,15 @@ import java.util.LinkedList;
 import java.util.StringTokenizer;
 
 public class searchPath_bfsAndTracking {
-    // 최단거리 구하기
 
     public static int n = 0;    // 행수
     public static int m = 0;    // 열수    
     public static int[][] map;  // 맵정보
-    public static int[][] pathMat ;
-    public static String path = "";        // 이동경로
-	static int startX =0 ,startY =0;
+    public static int[][] pathMat ; //최단 경로 배열 
+    public static String path = ""; // 이동경로
+	static int startX =0 ,startY =3;
 	static int endX=2, endY=5;
-	
 
-	
     public static void main(String[] args) throws IOException {
     	
     	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -34,19 +31,26 @@ public class searchPath_bfsAndTracking {
 					pathMat[i][j]=0;
 					map[i][j] = s.charAt(j) - '0';
 				}
-		 }
-            int dapth = 0;
+			}
+			
+            int[] result;
             path = "";
-            dapth = bfs();           
-            pathMatrix();
-            System.out.println("최소비용: " + dapth + " 최단경로: " + path);
+            result = bfs();           
+
+            if(endX!= result[1] && endY!= result[2]) {
+            	System.out.println("경로가 존재하지 않음");
+            }
+            else {
+            	pathMatrix();
+            	System.out.println("최소비용: " + result[0] + " 최단경로: " + path);
+            }
     }
  
-    private static int bfs() {
+    private static int[] bfs() {
         int  cost= 0;
         
-        int nowX = startX;        // 현재 row
-        int nowY = startY;        // 현재 col
+        int nowX = startX;        // 현재 x
+        int nowY = startY;        // 현재 y
         int nowDistance = 1;    // 현재 이동한 거리
         String nowPath = "";    // 현재까지 이동경로
 
@@ -64,25 +68,24 @@ public class searchPath_bfsAndTracking {
             cost = nowDistance;
             
             map[nowX][nowY] = 0;
-            
-            
+
             if(nowX == endX && nowY == endY) {
                 break;
             }
             
-            // 위로 갈수 있으면
+            // 위로 갈 수 있으면
             if(nowX-1 >= 0 && map[nowX-1][nowY] == 1) {
                 queue.add(new Node(nowX-1, nowY, nowDistance+1, nowPath));
             }
-            // 아래로 갈수 있으면
+            // 아래로 갈 수 있으면
             if(nowX+1 < n && map[nowX+1][nowY] == 1) {
                 queue.add(new Node(nowX+1, nowY, nowDistance+1, nowPath));
             }
-            // 왼쪽으로 갈수 있으면
+            // 왼쪽으로 갈 수 있으면
             if(nowY-1 >= 0 && map[nowX][nowY-1] == 1) {
                 queue.add(new Node(nowX, nowY-1, nowDistance+1, nowPath));
             }
-            // 오른쪽으로 갈수 있으면
+            // 오른쪽으로 갈 수 있으면
             if(nowY+1 < m && map[nowX][nowY+1] == 1) {
                 queue.add(new Node(nowX, nowY+1, nowDistance+1, nowPath));
             }
@@ -90,7 +93,7 @@ public class searchPath_bfsAndTracking {
         // 큐 클리어
         queue.clear();
         
-        return cost;
+        return new int[] {cost, nowX, nowY};
     }
     
     //최단 경로를 배열 형식으로 보여준다.
@@ -119,12 +122,12 @@ public class searchPath_bfsAndTracking {
             this.y = y;
             this.distance = distance;
             if("".equals(prePath)) {
-
                 this.path =  x + " " + y ; 
             }
             else {
-
-                this.path = prePath + "/" + x +" "+ y; 
+            	
+            	this.path = prePath + "/" + x +" "+ y; 
+            	//System.out.println(prePath);
             }
         }
     }
