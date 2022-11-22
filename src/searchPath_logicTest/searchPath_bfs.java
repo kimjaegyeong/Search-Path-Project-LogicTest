@@ -15,7 +15,7 @@ public class searchPath_bfs {
 	
 	static int startX =0 ,startY =2;
 	
-	static int endX= 2,  endY= 5;
+	static int endX=4, endY=6;
 	
 	static boolean[][] visited;
 	static int[] dx = { -1, 1, 0, 0 }; //x - 상하
@@ -39,8 +39,8 @@ public class searchPath_bfs {
 		}
 		
 		visited = new boolean[n][m];
-		visited[startX][startY] = true; //시작할 위치 startX, startY 를 방문으로 만듦. 
-		bfs(startX, startY); //시작할 위치 지정 (startX,startY) 
+		visited[0][2] = true; //시작할 위치 0,2 를 방문으로 만듦. 
+		bfs(0, 2); //시작할 위치 지정 (0,2) 
 		//System.out.println(map[n-1][m-1]);
 		
 		/*
@@ -73,14 +73,14 @@ public class searchPath_bfs {
                     		continue;
         		        
 		                q.add(new int[] {nextX, nextY});
-		                
+		               
         		        map[nextX][nextY] = map[nowX][nowY] + 1;
                 		//System.out.println(nextX + " " + nextY+ " "+map[nextX][nextY]);
                 		
 		                visited[nextX][nextY] = true;
 		                count = map[nextX][nextY];
 		               
-		                if(nextX==endX && nextY == endY) { //내가 원하는 좌표 (endX,endY)에 도달할 때 까지의 비용 
+		                if(nextX==2 && nextY == 5) { //내가 원하는 좌표 (2,5)에 도달할 때 까지의 비용 
 		                	System.out.println(count);
 		                	return ;
 		                }
