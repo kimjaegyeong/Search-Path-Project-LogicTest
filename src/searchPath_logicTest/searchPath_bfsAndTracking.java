@@ -12,32 +12,34 @@ public class searchPath_bfsAndTracking {
     public static int n = 0;    // 행수
     public static int m = 0;    // 열수    
     public static int[][] map;  // 맵정보
+    public static int[][] pathMat ;
     public static String path = "";        // 이동경로
-	static int startX =0 ,startY =2;
+	static int startX =0 ,startY =0;
 	static int endX=2, endY=5;
 	
 
 	
     public static void main(String[] args) throws IOException {
-
+    	
     	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		n = Integer.parseInt(st.nextToken());
 		m = Integer.parseInt(st.nextToken());
 		
 		map = new int[n][m];
-		
+		pathMat = new int [n][m];
 			for(int i=0; i<n; i++) {
 				String s = br.readLine();
 				for(int j=0; j<m; j++) {
+					pathMat[i][j]=0;
 					map[i][j] = s.charAt(j) - '0';
 				}
 		 }
             int dapth = 0;
             path = "";
             dapth = bfs();           
+            pathMatrix();
             System.out.println("최소비용: " + dapth + " 최단경로: " + path);
-    
     }
  
     private static int bfs() {
@@ -63,7 +65,7 @@ public class searchPath_bfsAndTracking {
             
             map[nowX][nowY] = 0;
             
-            // 목적지에 도착하면 루핑 종료
+            
             if(nowX == endX && nowY == endY) {
                 break;
             }
@@ -91,6 +93,22 @@ public class searchPath_bfsAndTracking {
         return cost;
     }
     
+    //최단 경로를 배열 형식으로 보여준다.
+    public static void pathMatrix() {
+        String [] paths =path.split("/"); // 슬래쉬로 구분된 경로 좌표들을 하나씩 배열에 넣음
+
+        for(String path: paths) {
+        	char[] xy= path.toCharArray(); // paths에 들어가있는 좌표 덩어리를 x,공백,y로 나눔
+        	pathMat[xy[0]-'0'][xy[2]-'0']=1; 
+        }
+        
+        for(int i= 0; i<n; i++) {
+        	for(int j=0; j<m; j++) {
+        		System.out.print(pathMat[i][j]+ " ");
+        	}
+        	System.out.println("");
+        }
+    }
     // 이동하는 위치정보 및 거리정보 저장
     public static class Node {
         int x, y, distance;
@@ -102,13 +120,11 @@ public class searchPath_bfsAndTracking {
             this.distance = distance;
             if("".equals(prePath)) {
 
-                this.path = "(" + x + ", " + y + ")"; 
+                this.path =  x + " " + y ; 
             }
             else {
 
-                this.path = prePath + " -> " + "(" + x + ", " + y + ")"; 
-        
-            	//System.out.println(this.path);
+                this.path = prePath + "/" + x +" "+ y; 
             }
         }
     }
